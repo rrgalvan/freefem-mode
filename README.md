@@ -1,4 +1,4 @@
-# FreeFem++ Emacs mode
+# FreeFem++-Mode
 
 An [Emacs](http://www.gnu.org/software/emacs) mode for the
 [FreeFem++](http://www.freefem.org/ff++/) language.
