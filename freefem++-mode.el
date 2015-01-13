@@ -391,7 +391,7 @@
       (goto-line freefempp-error-line) 
       (highlight-regexp freefempp-invalid-token)))))
 
-(defface freefempp-no-error
+(defface freefempp-no-error-face
   '((((type tty) (class mono)) :inverse-video t)
     (t :foreground "white" :background "DarkGreen"))
   "Face for highlighting the FreeFem++ no error message."
@@ -399,8 +399,8 @@
 
 (defun freefempp-output-buffer-show-no-error ()
   "To do if no error was detected"
-  (let ((freefempp-no-error-regexp "^Bien: On a fini Normalement"))
-  (hi-lock-line-face-buffer freefempp-no-error-regexp 'freefempp-no-error)))
+  (let ((freefempp-no-error-regexp "^Bien: On a fini Normalement\\|^Ok: Normal End"))
+  (hi-lock-line-face-buffer freefempp-no-error-regexp 'freefempp-no-error-face)))
 
 (defvar ffpp-mode-map () "Keymap used in freefem++-mode buffers.")
 (if ffpp-mode-map nil
