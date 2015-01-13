@@ -18,8 +18,8 @@ An [Emacs](http://www.gnu.org/software/emacs) mode for the
 Install:
 --------
 
-Copy the file freefem++-mode.el into a directory that is in your Emacs
-*load-path* variable. Then, add the appropriate lines into your *.emacs*
+Copy the file *freefem++-mode.el* into any directory located in your Emacs
+*load-path*. Then, add the appropriate lines into your *.emacs*
 configuration file, for instance:
 
 ```lisp
