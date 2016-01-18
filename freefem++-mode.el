@@ -195,7 +195,7 @@
          "tgv" "tolpivot" "tolpivotsym"
          "x" "y" "z"
 					; Finite elements
-         "P" "P0" "P1" "P2" "RT0" "P1nc" "P1dc" "P2dc" "P1b"
+         "P" "P0" "P1" "P2" "P3" "P4" "RT0" "P1nc" "P1dc" "P2dc" "P3dc" "P4dc" "P1b"
 					; Solvers
          "LU" "Cholesky" "Crout" "CG" "GMRES" "UMFPACK" "sparsesolver"
 					; Quadrature keywords
