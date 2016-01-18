@@ -167,7 +167,7 @@
   ;; nevertheless contains a list separated with ';' and not ','."
   freefem++ '("adaptmesh" "assert" "buildmesh"  "clock" "convect" 
          "dx" "dy" "dz" "intalledges" "int1d" "int2d" "int3d" 
-	 "jump" "mean" "movemesh" "on" "plot" "savemesh" "square"
+	 "jump" "mean" "average" "movemesh" "on" "plot" "savemesh" "square"
          "sin" "cos" "tan" "atan" "asin" "acos"
          "cotan" "sinh" "cosh" "tanh""cotanh"
          "exp" "log" "log10" "sqrt" "abs" "max" "min"
