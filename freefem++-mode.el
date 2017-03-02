@@ -12,12 +12,12 @@
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2 of the License, or
 ;; (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; see the file COPYING.  If not, write to
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -52,15 +52,15 @@
 ;;      Changelog:
 ;;        - Set up of comment/uncomment region menu entries.
 ;;        - Added syntax highligting for more keywords.
-;;        - Run buffer function was improved: 
-;;            + After running, window is split into two frames and FreeFem++ 
+;;        - Run buffer function was improved:
+;;            + After running, window is split into two frames and FreeFem++
 ;;              output is displayed in the bottom one.
-;;            + If FreeFem++ returned with an error: the error line is 
-;;              highlighted in output buffer; in code buffer, cursor goes to 
+;;            + If FreeFem++ returned with an error: the error line is
+;;              highlighted in output buffer; in code buffer, cursor goes to
 ;;              error line and error keyword is highlighted
 ;;   * 2008 September 9 - Released version 0.1
 ;;      Changelog:
-;;        - First version: Syntax higlighting of several keywords, 
+;;        - First version: Syntax higlighting of several keywords,
 ;;          FreeFem++ menú, possibility of running FreFem++ code buffer
 ;;----------------------------------------------------------------------------
 ;; Code:
@@ -75,6 +75,7 @@
 ;; necessary to get them compiled.)
 ;; Coment out 'when-compile part for debugging
 (eval-when-compile
+  (require 'cl)
   (require 'cc-langs)
   (require 'cc-fonts)
   )
@@ -98,7 +99,7 @@
 	 "real" "R3" "solve" "string" "varf" "vertex" ))
 
 ;; Keywords that can prefix normal declarations of identifiers
-(c-lang-defconst c-modifier-kwds 
+(c-lang-defconst c-modifier-kwds
   freefem++  nil)
 
 (c-lang-defconst c-class-decl-kwds
@@ -165,8 +166,8 @@
 (c-lang-defconst c-paren-stmt-kwds
   ;; Statement keywords followed by a parenthesis expression that
   ;; nevertheless contains a list separated with ';' and not ','."
-  freefem++ '("adaptmesh" "assert" "buildmesh"  "clock" "convect" 
-         "dx" "dy" "dz" "intalledges" "int1d" "int2d" "int3d" 
+  freefem++ '("adaptmesh" "assert" "buildmesh"  "clock" "convect"
+         "dx" "dy" "dz" "intalledges" "int1d" "int2d" "int3d"
 	 "jump" "mean" "average" "movemesh" "on" "plot" "savemesh" "square"
          "sin" "cos" "tan" "atan" "asin" "acos"
          "cotan" "sinh" "cosh" "tanh""cotanh"
@@ -189,9 +190,9 @@
   ;; Keywords for constants.
   freefem++ '("false" "i" "pi" "true"
          "anisomax" "area" "CG" "cin" "cout"  "endl" "eps"
-         "hTriangle""init" "label" 
-         "lenEdge" "N"  "nTonEdge" "nuTriangle" "nuEdge" 
-         "precon""region" "split" "solver" "strategy" 
+         "hTriangle""init" "label"
+         "lenEdge" "N"  "nTonEdge" "nuTriangle" "nuEdge"
+         "precon""region" "split" "solver" "strategy"
          "tgv" "tolpivot" "tolpivotsym"
          "x" "y" "z"
 					; Finite elements
@@ -205,7 +206,7 @@
          "fill" "wait"
 					; Adaptmesh
          "hmax" "hmin" "err" "errg" "nbvx" "nbsmooth" "nbjacobi"
-         "ratio" "omega" "iso" "abserror" "cutoff" "verbosity" 
+         "ratio" "omega" "iso" "abserror" "cutoff" "verbosity"
          "inquire" "splitpbedge" "maxsubdiv" "rescaling" "keepbackvertices"
          "isMetric" "power" "thetamax" "splitin2" "metric"
          "nomeshgeneration" "periodic"
@@ -232,7 +233,7 @@
   freefem++ nil )
 
 ;; (defcustom freefem++-font-lock-extra-types nil
-;;   "*List of extra types (aside from the type keywords) to recognize in FreeFem++ mode. 
+;;   "*List of extra types (aside from the type keywords) to recognize in FreeFem++ mode.
 ;;    Each list item should be a regexp matching a single identifier."
 ;;   )
 
@@ -255,7 +256,7 @@
 	  (let ((table (funcall (c-lang-const c-make-mode-syntax-table freefem++))))
 	    ;; Make it recognize D `backquote strings`
 	    (modify-syntax-entry ?' "_" table)
-	    ;; Make it recognize D's nested /+ +/ comments 
+	    ;; Make it recognize D's nested /+ +/ comments
 	    ;; You'll definitely need an elisp manual for this:
 	    ;; http://www.delorie.com/gnu/docs/elisp-manual-21/
 					;(modify-syntax-entry ?+  ". 23n"   table)
@@ -264,7 +265,7 @@
 (defvar freefem++-mode-abbrev-table nil
   "Abbreviation table used in freefem++-mode buffers.")
 (c-define-abbrev-table 'freefem++-mode-abbrev-table
-  ;; Use the abbrevs table to trigger indentation actions 
+  ;; Use the abbrevs table to trigger indentation actions
   ;; on keywords that, if they occur first on a line, might alter the
   ;; syntactic context.
   ;; Syntax for abbrevs is:
@@ -275,14 +276,14 @@
     ("finally" "finally" c-electric-continued-statement 0)))
 
 
-;(defvar freefempp-program "xterm -e FreeFem++" 
+;(defvar freefempp-program "xterm -e FreeFem++"
 (defvar freefempp-program "FreeFem++-x11"
       "* Command used to execute FreeFem++. Possible values: FreeFem++, FreeFem++-x11, FreeFem++-mpi, etc")
 (defvar freefempp-output-buffer "*FreeFem++ Output*")
 (defvar freefempp-process "Process currently executing freefem")
 (defvar freefempp-process-code-buffer nil "Buffer freefem output is being displayied in")
 
-(defun show-code-and-output-buffers () 
+(defun show-code-and-output-buffers ()
   (switch-to-buffer freefempp-process-code-buffer)
   (delete-other-windows)
   (switch-to-buffer-other-window freefempp-output-buffer)
@@ -303,7 +304,7 @@
     ;; Show exit info
     (cond ((string-equal (process-status freefempp-process) "signal")
 	   (message (format "%s %s"
-			    (process-name freefempp-process) 
+			    (process-name freefempp-process)
 			    "interrupted")))
 	  (t (message (format "%s %s "
 			      (process-name freefempp-process)
@@ -335,7 +336,7 @@
   (interactive)
   (save-some-buffers)
   (freefempp-remove-hi-lock)
-  (let 
+  (let
       ((freefempp-code-buffer (file-name-nondirectory buffer-file-name))
        (freefempp-error-info (list 0 nil)))
     ;; Clean freefempp-output-buffer, split window and change to it
@@ -343,7 +344,7 @@
 	(kill-buffer freefempp-output-buffer))
     (switch-to-buffer-other-window freefempp-output-buffer)
     ;; Send code to FreeFem++, saving the process
-    (setq freefempp-process 
+    (setq freefempp-process
 	  (start-file-process-shell-command "FreeFem++"
 					    (get-buffer-create freefempp-output-buffer)
 	  				    freefempp-program
@@ -359,15 +360,15 @@
   (while hi-lock-interactive-patterns
     (hi-lock-unface-buffer (car(car hi-lock-interactive-patterns)))))
 
-(defun freefempp-get-error-info () 
+(defun freefempp-get-error-info ()
   "Look at FreeFem++ output and return a list (err-line, err-string),
   where err-line is the error line (or 0 if no information about error
   line was detected) and err-string is the information presented by
   FreeFem++ (usually, a wrong token)."
-  (let ((line-number "0") 
-	(error-regexp "\s*Error line number \\([0-9]*\\),") 
+  (let ((line-number "0")
+	(error-regexp "\s*Error line number \\([0-9]*\\),")
 	(wrong-token nil))
-    (save-excursion 
+    (save-excursion
        (cond ((search-backward-regexp error-regexp nil t)
               (setq line-number (match-string 1)
                     wrong-token (match-string 2)))))
@@ -378,17 +379,17 @@
   "If an error was detected, set point in error line in FreeFem++ output"
   (let ((freefempp-error-line (car freefempp-error-info)))
     (cond ((> freefempp-error-line 0)
-     (let ((freefempp-error-regexp 
+     (let ((freefempp-error-regexp
        (concatenate 'string "^[ \t]*" (number-to-string freefempp-error-line) " :")))
      (search-backward-regexp freefempp-error-regexp nil t)
      (hi-lock-line-face-buffer freefempp-error-regexp))))))
-   
+
 (defun freefempp-code-buffer-show-error(freefempp-error-info)
   "If an error was detected, set point in error line an highligt the wrong token"
   (let ((freefempp-error-line (car freefempp-error-info))
         (freefempp-invalid-token (car (cdr freefempp-error-info))))
     (cond ((> freefempp-error-line 0)
-      (goto-line freefempp-error-line) 
+      (goto-line freefempp-error-line)
       (highlight-regexp freefempp-invalid-token)))))
 
 (defface freefempp-no-error-face
